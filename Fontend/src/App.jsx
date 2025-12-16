@@ -7,6 +7,7 @@ import Lessons from "./Page/Lessons";
 import Login from "./Page/Login";
 import Register from "./Page/Register";
 import Service from "./Page/Service";
+import Footer from "./components/Footer";
 
 function App() {
 
@@ -24,6 +25,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
       </Routes>
+      <Footer />
     </>
   )
 }
