@@ -1,12 +1,7 @@
 import { useEffect, useState } from "react";
 
 export default function Login() {
-    useEffect(() => {
-        document.body.style.overflow = "hidden";
-        return () => {
-            document.body.style.overflow = "auto";
-        };
-    }, []);
+
 
     const [formData, setFormData] = useState({
         email: "",
