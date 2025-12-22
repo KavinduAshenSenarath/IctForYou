@@ -1,5 +1,14 @@
 import User from "../models/User.js";
+import jwt from "jsonwebtoken";
 
+// Genarate JWT token 
+const generateToken = (id) => {
+    return jwt.sign({ id }, process.env.JWT_SECRET, {
+        expiresIn: '30d'
+    });
+};
+
+// Register new user
 export const registerUser = async (req, res) => {
     try {
         const { name, email, password, grade } = req.body;
@@ -40,7 +49,7 @@ export const registerUser = async (req, res) => {
         res.status(500).json({ message: "Server error" });
     }
 };
-
+// Login user
 export const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -51,29 +60,29 @@ export const loginUser = async (req, res) => {
                 message: "please enter email and password"
             })
         }
+
+
         //find user 
         const user = await User.findOne({ email });
-        if (!user) {
-            return res.status(401).json({
-                message: "invalid email or password "
-            })
-        }
-        // password check
-        if (user.password !== password) {
-            return res.status(401).json({
+
+
+        if (user && (await user.matchPassword(password))) {
+            res.status(200).json({
+                message: "login successful",
+                token: generateToken(user._id),
+                user: {
+                    id: user._id,
+                    name: user.name,
+                    email: user.email,
+                    grade: user.grade,
+                },
+            });
+        } else {
+            res.status(401).json({
                 message: "invalid email or password"
-            })
+            });
         }
-        // success 
-        res.status(200).json({
-            message: "Login successful",
-            user: {
-                id: user._id,
-                name: user.name,
-                email: user.email,
-                grade: user.grade
-            }
-        })
+
     } catch (error) {
         console.error("Login error:", error);
         res.status(500).json({
@@ -81,3 +90,10 @@ export const loginUser = async (req, res) => {
         })
     }
 }
+export const getUserProfile = async (req, res) => {
+    res.status(200).json({
+        message: "profile accessed successfully ",
+        user: req.user,
+    });
+};
+
