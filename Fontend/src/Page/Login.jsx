@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import axios from "axios"
 
 export default function Login() {
 
@@ -18,7 +19,7 @@ export default function Login() {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setError("");
         setSuccess("");
@@ -28,14 +29,27 @@ export default function Login() {
             return;
         }
 
-        console.log("Form Data:", formData);
-        setSuccess("Login Successful!");
+        try {
+            const { data } = await axios.post(
+                "http://localhost:5000/api/users/login",
+                formData
+            );
 
-        setFormData({
-            email: "",
-            password: ""
-        });
+            //saved the jwt token 
+            localStorage.setItem("token", data.token);
+            localStorage.setItem("user", JSON.stringify(data.user));
+
+            // rederict to the dashboard 
+            navigate("/dashboard")
+
+
+        } catch (err) {
+            setError(err.response?.data?.message || "login failed")
+        }
     };
+
+
+
 
     return (
         <div className="min-h-screen flex flex-col items-center justify-center text-center">
@@ -97,6 +111,7 @@ export default function Login() {
                             type="button"
                             className="w-full flex items-center justify-center gap-3 border border-blue-400 rounded-xl py-2 hover:bg-gray-100 transition"
                         >
+                            {error && <p>{error}</p>}
                             <img src="google.svg" alt="Google" className="w-5 h-5 cursor-pointer" />
                             Google
                         </button>
