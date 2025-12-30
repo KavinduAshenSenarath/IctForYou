@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import BrowseOurBestLessons from './Browsecourse';
 export default function Home() {
     return (
         <div>
@@ -97,16 +98,8 @@ export default function Home() {
             <div className='text-3xl font-sans font-extrabold text-center mt-10'>
                 Browse our Best<span className='text-blue-500'> Lessons </span>
             </div>
-            <div className='flex gap-60 mt-10 '>
-                <div className='bg-gray-400 w-70 h-100 ml-15 rounded-xl'>
-
-                </div>
-                <div className='bg-stone-400 w-70 h-100 rounded-xl'>
-
-                </div>
-                <div className='bg-gray-400 w-70 h-100 rounded-xl'>
-
-                </div>
+            <div>
+                <BrowseOurBestLessons />
             </div>
         </div>
     );
